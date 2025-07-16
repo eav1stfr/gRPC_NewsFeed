@@ -1,0 +1,11 @@
+go 1.24.2
+
+use (
+	api_gateway
+	proto
+	services/feed
+	services/notifications
+	services/post
+	services/user
+	utils
+)
