@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "/user/gen/";
+
+import "google/protobuf/empty.proto";
+
+message User {
+  string first_name = 1;
+  string last_name = 2;
+  string id = 3;
+  string email = 4;
+  string username = 5;
+  string avatar_url = 6;
+  string bio = 7;
+  string created_at = 8;
+}
+
+message RegisterRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  string password = 4;
+  string username = 5;
+}
+
+message RegisterResponse {
+  string user_id = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string jwt_token = 1;
+}
+
+message GetProfileRequest {
+  User user = 1;
+}
+
+message GetProfileResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string user_id = 1;
+  string username = 2;
+  string avatar_url = 3;
+  string bio = 4;
+}
+
+message FollowRequest {
+  string follower_id = 1;
+  string followee_id = 2;
+}
+
+message UnfollowRequest {
+  string follower_id = 1;
+  string followee_id = 2;
+}
+
+message FollowListRequest {
+  string user_id = 1;
+}
+
+message FollowListResponse {
+  repeated User users = 1;
+}
+
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc UpdateProfile(UpdateProfileRequest) returns (google.protobuf.Empty);
+
+  rpc Follow(FollowRequest) returns (google.protobuf.Empty);
+  rpc Unfollow(UnfollowRequest) returns (google.protobuf.Empty);
+
+  rpc GetFollowing(FollowRequest) returns (FollowListResponse);
+  rpc GetFollowers(FollowRequest) returns (FollowListResponse);
+}
