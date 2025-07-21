@@ -40,8 +40,8 @@ type UserServiceClient interface {
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Follow(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Unfollow(ctx context.Context, in *UnfollowRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	GetFollowing(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowListResponse, error)
-	GetFollowers(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowListResponse, error)
+	GetFollowing(ctx context.Context, in *FollowListRequest, opts ...grpc.CallOption) (*FollowListResponse, error)
+	GetFollowers(ctx context.Context, in *FollowListRequest, opts ...grpc.CallOption) (*FollowListResponse, error)
 }
 
 type userServiceClient struct {
@@ -112,7 +112,7 @@ func (c *userServiceClient) Unfollow(ctx context.Context, in *UnfollowRequest, o
 	return out, nil
 }
 
-func (c *userServiceClient) GetFollowing(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowListResponse, error) {
+func (c *userServiceClient) GetFollowing(ctx context.Context, in *FollowListRequest, opts ...grpc.CallOption) (*FollowListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FollowListResponse)
 	err := c.cc.Invoke(ctx, UserService_GetFollowing_FullMethodName, in, out, cOpts...)
@@ -122,7 +122,7 @@ func (c *userServiceClient) GetFollowing(ctx context.Context, in *FollowRequest,
 	return out, nil
 }
 
-func (c *userServiceClient) GetFollowers(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowListResponse, error) {
+func (c *userServiceClient) GetFollowers(ctx context.Context, in *FollowListRequest, opts ...grpc.CallOption) (*FollowListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FollowListResponse)
 	err := c.cc.Invoke(ctx, UserService_GetFollowers_FullMethodName, in, out, cOpts...)
@@ -142,8 +142,8 @@ type UserServiceServer interface {
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*emptypb.Empty, error)
 	Follow(context.Context, *FollowRequest) (*emptypb.Empty, error)
 	Unfollow(context.Context, *UnfollowRequest) (*emptypb.Empty, error)
-	GetFollowing(context.Context, *FollowRequest) (*FollowListResponse, error)
-	GetFollowers(context.Context, *FollowRequest) (*FollowListResponse, error)
+	GetFollowing(context.Context, *FollowListRequest) (*FollowListResponse, error)
+	GetFollowers(context.Context, *FollowListRequest) (*FollowListResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -172,10 +172,10 @@ func (UnimplementedUserServiceServer) Follow(context.Context, *FollowRequest) (*
 func (UnimplementedUserServiceServer) Unfollow(context.Context, *UnfollowRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Unfollow not implemented")
 }
-func (UnimplementedUserServiceServer) GetFollowing(context.Context, *FollowRequest) (*FollowListResponse, error) {
+func (UnimplementedUserServiceServer) GetFollowing(context.Context, *FollowListRequest) (*FollowListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowing not implemented")
 }
-func (UnimplementedUserServiceServer) GetFollowers(context.Context, *FollowRequest) (*FollowListResponse, error) {
+func (UnimplementedUserServiceServer) GetFollowers(context.Context, *FollowListRequest) (*FollowListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowers not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
@@ -308,7 +308,7 @@ func _UserService_Unfollow_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _UserService_GetFollowing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FollowRequest)
+	in := new(FollowListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -320,13 +320,13 @@ func _UserService_GetFollowing_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: UserService_GetFollowing_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetFollowing(ctx, req.(*FollowRequest))
+		return srv.(UserServiceServer).GetFollowing(ctx, req.(*FollowListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _UserService_GetFollowers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FollowRequest)
+	in := new(FollowListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -338,7 +338,7 @@ func _UserService_GetFollowers_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: UserService_GetFollowers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetFollowers(ctx, req.(*FollowRequest))
+		return srv.(UserServiceServer).GetFollowers(ctx, req.(*FollowListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

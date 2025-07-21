@@ -39,7 +39,7 @@ message LoginResponse {
 }
 
 message GetProfileRequest {
-  User user = 1;
+  string id = 1;
 }
 
 message GetProfileResponse {
@@ -48,9 +48,9 @@ message GetProfileResponse {
 
 message UpdateProfileRequest {
   string user_id = 1;
-  string username = 2;
-  string avatar_url = 3;
-  string bio = 4;
+  optional string username = 2;
+  optional string avatar_url = 3;
+  optional string bio = 4;
 }
 
 message FollowRequest {
@@ -81,6 +81,6 @@ service UserService {
   rpc Follow(FollowRequest) returns (google.protobuf.Empty);
   rpc Unfollow(UnfollowRequest) returns (google.protobuf.Empty);
 
-  rpc GetFollowing(FollowRequest) returns (FollowListResponse);
-  rpc GetFollowers(FollowRequest) returns (FollowListResponse);
+  rpc GetFollowing(FollowListRequest) returns (FollowListResponse);
+  rpc GetFollowers(FollowListRequest) returns (FollowListResponse);
 }

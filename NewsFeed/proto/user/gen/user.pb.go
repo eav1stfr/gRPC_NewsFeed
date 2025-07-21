@@ -340,7 +340,7 @@ func (x *LoginResponse) GetJwtToken() string {
 
 type GetProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -375,11 +375,11 @@ func (*GetProfileRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetProfileRequest) GetUser() *User {
+func (x *GetProfileRequest) GetId() string {
 	if x != nil {
-		return x.User
+		return x.Id
 	}
-	return nil
+	return ""
 }
 
 type GetProfileResponse struct {
@@ -429,9 +429,9 @@ func (x *GetProfileResponse) GetUser() *User {
 type UpdateProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
-	Bio           string                 `protobuf:"bytes,4,opt,name=bio,proto3" json:"bio,omitempty"`
+	Username      *string                `protobuf:"bytes,2,opt,name=username,proto3,oneof" json:"username,omitempty"`
+	AvatarUrl     *string                `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
+	Bio           *string                `protobuf:"bytes,4,opt,name=bio,proto3,oneof" json:"bio,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -474,22 +474,22 @@ func (x *UpdateProfileRequest) GetUserId() string {
 }
 
 func (x *UpdateProfileRequest) GetUsername() string {
-	if x != nil {
-		return x.Username
+	if x != nil && x.Username != nil {
+		return *x.Username
 	}
 	return ""
 }
 
 func (x *UpdateProfileRequest) GetAvatarUrl() string {
-	if x != nil {
-		return x.AvatarUrl
+	if x != nil && x.AvatarUrl != nil {
+		return *x.AvatarUrl
 	}
 	return ""
 }
 
 func (x *UpdateProfileRequest) GetBio() string {
-	if x != nil {
-		return x.Bio
+	if x != nil && x.Bio != nil {
+		return *x.Bio
 	}
 	return ""
 }
@@ -716,19 +716,21 @@ const file_user_user_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\",\n" +
 	"\rLoginResponse\x12\x1b\n" +
-	"\tjwt_token\x18\x01 \x01(\tR\bjwtToken\"3\n" +
-	"\x11GetProfileRequest\x12\x1e\n" +
-	"\x04user\x18\x01 \x01(\v2\n" +
-	".user.UserR\x04user\"4\n" +
+	"\tjwt_token\x18\x01 \x01(\tR\bjwtToken\"#\n" +
+	"\x11GetProfileRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"4\n" +
 	"\x12GetProfileResponse\x12\x1e\n" +
 	"\x04user\x18\x01 \x01(\v2\n" +
-	".user.UserR\x04user\"|\n" +
+	".user.UserR\x04user\"\xaf\x01\n" +
 	"\x14UpdateProfileRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername\x12\x1d\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1f\n" +
+	"\busername\x18\x02 \x01(\tH\x00R\busername\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\x12\x10\n" +
-	"\x03bio\x18\x04 \x01(\tR\x03bio\"Q\n" +
+	"avatar_url\x18\x03 \x01(\tH\x01R\tavatarUrl\x88\x01\x01\x12\x15\n" +
+	"\x03bio\x18\x04 \x01(\tH\x02R\x03bio\x88\x01\x01B\v\n" +
+	"\t_usernameB\r\n" +
+	"\v_avatar_urlB\x06\n" +
+	"\x04_bio\"Q\n" +
 	"\rFollowRequest\x12\x1f\n" +
 	"\vfollower_id\x18\x01 \x01(\tR\n" +
 	"followerId\x12\x1f\n" +
@@ -743,7 +745,7 @@ const file_user_user_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"6\n" +
 	"\x12FollowListResponse\x12 \n" +
 	"\x05users\x18\x01 \x03(\v2\n" +
-	".user.UserR\x05users2\xf0\x03\n" +
+	".user.UserR\x05users2\xf8\x03\n" +
 	"\vUserService\x129\n" +
 	"\bRegister\x12\x15.user.RegisterRequest\x1a\x16.user.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12?\n" +
@@ -751,9 +753,9 @@ const file_user_user_proto_rawDesc = "" +
 	"GetProfile\x12\x17.user.GetProfileRequest\x1a\x18.user.GetProfileResponse\x12C\n" +
 	"\rUpdateProfile\x12\x1a.user.UpdateProfileRequest\x1a\x16.google.protobuf.Empty\x125\n" +
 	"\x06Follow\x12\x13.user.FollowRequest\x1a\x16.google.protobuf.Empty\x129\n" +
-	"\bUnfollow\x12\x15.user.UnfollowRequest\x1a\x16.google.protobuf.Empty\x12=\n" +
-	"\fGetFollowing\x12\x13.user.FollowRequest\x1a\x18.user.FollowListResponse\x12=\n" +
-	"\fGetFollowers\x12\x13.user.FollowRequest\x1a\x18.user.FollowListResponseB\fZ\n" +
+	"\bUnfollow\x12\x15.user.UnfollowRequest\x1a\x16.google.protobuf.Empty\x12A\n" +
+	"\fGetFollowing\x12\x17.user.FollowListRequest\x1a\x18.user.FollowListResponse\x12A\n" +
+	"\fGetFollowers\x12\x17.user.FollowListRequest\x1a\x18.user.FollowListResponseB\fZ\n" +
 	"/user/gen/b\x06proto3"
 
 var (
@@ -785,30 +787,29 @@ var file_user_user_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),        // 12: google.protobuf.Empty
 }
 var file_user_user_proto_depIdxs = []int32{
-	0,  // 0: user.GetProfileRequest.user:type_name -> user.User
-	0,  // 1: user.GetProfileResponse.user:type_name -> user.User
-	0,  // 2: user.FollowListResponse.users:type_name -> user.User
-	1,  // 3: user.UserService.Register:input_type -> user.RegisterRequest
-	3,  // 4: user.UserService.Login:input_type -> user.LoginRequest
-	5,  // 5: user.UserService.GetProfile:input_type -> user.GetProfileRequest
-	7,  // 6: user.UserService.UpdateProfile:input_type -> user.UpdateProfileRequest
-	8,  // 7: user.UserService.Follow:input_type -> user.FollowRequest
-	9,  // 8: user.UserService.Unfollow:input_type -> user.UnfollowRequest
-	8,  // 9: user.UserService.GetFollowing:input_type -> user.FollowRequest
-	8,  // 10: user.UserService.GetFollowers:input_type -> user.FollowRequest
-	2,  // 11: user.UserService.Register:output_type -> user.RegisterResponse
-	4,  // 12: user.UserService.Login:output_type -> user.LoginResponse
-	6,  // 13: user.UserService.GetProfile:output_type -> user.GetProfileResponse
-	12, // 14: user.UserService.UpdateProfile:output_type -> google.protobuf.Empty
-	12, // 15: user.UserService.Follow:output_type -> google.protobuf.Empty
-	12, // 16: user.UserService.Unfollow:output_type -> google.protobuf.Empty
-	11, // 17: user.UserService.GetFollowing:output_type -> user.FollowListResponse
-	11, // 18: user.UserService.GetFollowers:output_type -> user.FollowListResponse
-	11, // [11:19] is the sub-list for method output_type
-	3,  // [3:11] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	0,  // 0: user.GetProfileResponse.user:type_name -> user.User
+	0,  // 1: user.FollowListResponse.users:type_name -> user.User
+	1,  // 2: user.UserService.Register:input_type -> user.RegisterRequest
+	3,  // 3: user.UserService.Login:input_type -> user.LoginRequest
+	5,  // 4: user.UserService.GetProfile:input_type -> user.GetProfileRequest
+	7,  // 5: user.UserService.UpdateProfile:input_type -> user.UpdateProfileRequest
+	8,  // 6: user.UserService.Follow:input_type -> user.FollowRequest
+	9,  // 7: user.UserService.Unfollow:input_type -> user.UnfollowRequest
+	10, // 8: user.UserService.GetFollowing:input_type -> user.FollowListRequest
+	10, // 9: user.UserService.GetFollowers:input_type -> user.FollowListRequest
+	2,  // 10: user.UserService.Register:output_type -> user.RegisterResponse
+	4,  // 11: user.UserService.Login:output_type -> user.LoginResponse
+	6,  // 12: user.UserService.GetProfile:output_type -> user.GetProfileResponse
+	12, // 13: user.UserService.UpdateProfile:output_type -> google.protobuf.Empty
+	12, // 14: user.UserService.Follow:output_type -> google.protobuf.Empty
+	12, // 15: user.UserService.Unfollow:output_type -> google.protobuf.Empty
+	11, // 16: user.UserService.GetFollowing:output_type -> user.FollowListResponse
+	11, // 17: user.UserService.GetFollowers:output_type -> user.FollowListResponse
+	10, // [10:18] is the sub-list for method output_type
+	2,  // [2:10] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_user_user_proto_init() }
@@ -816,6 +817,7 @@ func file_user_user_proto_init() {
 	if File_user_user_proto != nil {
 		return
 	}
+	file_user_user_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

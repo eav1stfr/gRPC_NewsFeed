@@ -1,4 +1,4 @@
-package models
+package handlers
 
 import pb "proto/user/gen"
 
