@@ -2,34 +2,11 @@ package sqlconnect
 
 import (
 	"context"
-	"github.com/jmoiron/sqlx"
-	"post/internals/api/handlers"
 	"post/internals/api/models"
 	pb "proto/post/gen"
 	"strconv"
 	"utils"
 )
-
-//message Post {
-//	string post_id = 1;
-//	string user_id = 2; // author id
-//	string content = 3;
-//	string image_url = 4;
-//	string created_at = 5;
-//	string updated_at = 6;
-//	int32 like_count = 7;
-//	int32 comment_count = 8;
-//}
-
-//message CreatePostRequest {
-//	string user_id = 1;
-//	string content = 2;
-//	string image_url = 3;
-//}
-
-// message CreatePostResponse {
-//	string post_id = 1;
-//}
 
 func CreatePostDbHandler(ctx context.Context, req *pb.CreatePostRequest) (string, error) {
 	db, err := ConnectDb()
@@ -48,25 +25,6 @@ func CreatePostDbHandler(ctx context.Context, req *pb.CreatePostRequest) (string
 	return strconv.Itoa(id), nil
 }
 
-//message GetPostRequest {
-//	string post_id = 1;
-//}
-//
-//message GetPostResponse {
-//	Post post = 1;
-//}
-
-//type Post struct {
-//	Id           int32     `db:"id"`
-//	UserId       int32     `db:"user_id"`
-//	Content      string    `db:"content"`
-//	ImageUrl     string    `db:"image_url"`
-//	LikeCount    int32     `db:"like_count"`
-//	CommentCount int32     `db:"comment_count"`
-//	CreatedAt    time.Time `db:"created_at"`
-//	UpdatedAt    time.Time `db:"updated_at"`
-//}
-
 func GetPostDbHandler(ctx context.Context, req *pb.GetPostRequest) (*pb.Post, error) {
 	db, err := ConnectDb()
 	if err != nil {
@@ -81,25 +39,6 @@ func GetPostDbHandler(ctx context.Context, req *pb.GetPostRequest) (*pb.Post, er
 	}
 	return convertDbPostToGrpc(post), nil
 }
-
-//message GetUserPostsRequest {
-//	string user_id =1;
-//}
-
-//message GetUserPostsResponse {
-//	repeated Post posts = 1;
-//}
-
-//type Post struct {
-//	Id           int32     `db:"id"`
-//	UserId       int32     `db:"user_id"`
-//	Content      string    `db:"content"`
-//	ImageUrl     string    `db:"image_url"`
-//	LikeCount    int32     `db:"like_count"`
-//	CommentCount int32     `db:"comment_count"`
-//	CreatedAt    time.Time `db:"created_at"`
-//	UpdatedAt    time.Time `db:"updated_at"`
-//}
 
 func GetUserPostsDbHandler(ctx context.Context, req *pb.GetUserPostsRequest) ([]*pb.Post, error) {
 	db, err := ConnectDb()
@@ -121,11 +60,6 @@ func GetUserPostsDbHandler(ctx context.Context, req *pb.GetUserPostsRequest) ([]
 	}
 	return convertDbPostListToGrpcList(posts), nil
 }
-
-//message DeletePostRequest {
-//	string post_id = 1;
-//	string user_id = 2;
-//}
 
 func DeletePostDbHandler(ctx context.Context, req *pb.DeletePostRequest) error {
 	db, err := ConnectDb()
