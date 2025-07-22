@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package post;
+
+option go_package = "/post/gen/";
+
+import "google/protobuf/empty.proto";
+
+
+// INFO - POST FUNCTIONALITY
+message Post {
+  string post_id = 1;
+  string user_id = 2; // author id
+  string content = 3;
+  string image_url = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  int32 like_count = 7;
+  int32 comment_count = 8;
+}
+
+message CreatePostRequest {
+  string user_id = 1;
+  string content = 2;
+  string image_url = 3;
+}
+
+message CreatePostResponse {
+  string post_id = 1;
+}
+
+message DeletePostRequest {
+  string post_id = 1;
+  string user_id = 2;
+}
+
+message GetPostRequest {
+  string post_id = 1;
+}
+
+message GetPostResponse {
+  Post post = 1;
+}
+
+message GetUserPostsRequest {
+  string user_id =1;
+}
+
+message GetUserPostsResponse {
+  repeated Post posts = 1;
+}
+
+// INFO - LIKES FUNCTIONALITY
+message LikePostRequest {
+  string post_id = 1;
+  string user_id = 2;
+}
+
+message UnlikePostRequest {
+  string post_id = 1;
+  string user_id = 2;
+}
+
+message GetPostLikesRequest {
+  string post_id = 1;
+}
+
+message GetPostLikesResponse {
+  repeated string user_ids = 1;
+}
+
+// INFO - COMMENTS FUNCTIONALITY
+message Comment {
+  string id = 1; // comment id
+  string post_id = 2; // post id
+  string creator_id = 3; // id of the comment creator
+  string content = 4;
+  string created_at = 5;
+}
+
+message AddCommentRequest {
+  string post_id = 1;
+  string user_id = 2;
+  string content = 3;
+}
+
+message AddCommentResponse {
+  string comment_id = 1;
+}
+
+message GetPostCommentsRequest {
+  string post_id = 1;
+}
+
+message GetPostCommentsResponse {
+  repeated Comment comments = 1;
+}
+
+message DeleteCommentRequest {
+  string comment_id = 1;
+  string post_id = 2;
+}
+
+message UpdateCommentRequest {
+  string comment_id = 1;
+  string post_id = 2;
+  string updated_content = 3;
+}
+
+service PostService {
+  // post
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+  rpc GetPost(GetPostRequest) returns (GetPostResponse);
+  rpc GetUserPosts(GetUserPostsRequest) returns (GetUserPostsResponse);
+  rpc DeletePost(DeletePostRequest) returns (google.protobuf.Empty);
+
+  // likes
+  rpc LikePost(LikePostRequest) returns (google.protobuf.Empty);
+  rpc UnlikePost(UnlikePostRequest) returns (google.protobuf.Empty);
+  rpc GetPostLikes(GetPostLikesRequest) returns (GetPostLikesResponse);
+
+  // comment
+  rpc AddComment(AddCommentRequest) returns (AddCommentResponse);
+  rpc GetComments(GetPostCommentsRequest) returns (GetPostCommentsResponse);
+  rpc UpdateComment(UpdateCommentRequest) returns (google.protobuf.Empty);
+  rpc DeleteComment(DeleteCommentRequest) returns (google.protobuf.Empty);
+}
