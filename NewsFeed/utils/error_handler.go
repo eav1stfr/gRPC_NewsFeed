@@ -75,4 +75,10 @@ var (
 	IncorrectPassword = &AppErr{
 		errMessage: "incorrect password",
 		statusCode: codes.PermissionDenied}
+	MissingRequestFieldsError = &AppErr{
+		errMessage: "missing request fields",
+		statusCode: codes.InvalidArgument}
+	InvalidRequestPayload = &AppErr{
+		errMessage: "invalid request payload",
+		statusCode: codes.InvalidArgument}
 )
