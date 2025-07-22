@@ -2,6 +2,7 @@ package sqlconnect
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/jackc/pgconn"
 	pb "proto/user/gen"
@@ -60,24 +61,6 @@ func GetUserProfileDbHandler(ctx context.Context, req *pb.GetProfileRequest) (*p
 	return res, nil
 }
 
-//CREATE TABLE follows (
-//	follower_id INT NOT NULL,
-//	followed_id INT NOT NULL,
-//	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//
-//	PRIMARY KEY (follower_id, followed_id),
-//
-//	FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
-//	FOREIGN KEY (followed_id) REFERENCES users(id) ON DELETE CASCADE,
-//
-//	CHECK (follower_id <> followed_id)
-//);
-
-//message FollowRequest {
-//	string follower_id = 1;
-//	string followee_id = 2;
-//}
-
 func FollowDbHandler(ctx context.Context, req *pb.FollowRequest) error {
 	db, err := ConnectDB()
 	if err != nil {
@@ -126,14 +109,6 @@ func UnfollowDbHandler(ctx context.Context, req *pb.UnfollowRequest) error {
 	return nil
 }
 
-//message FollowListRequest {
-//	string user_id = 1;
-//}
-//
-//message FollowListResponse {
-//	repeated User users = 1;
-//}
-
 func GetFollowingListDbHandler(ctx context.Context, req *pb.FollowListRequest, followers bool) ([]*pb.User, error) {
 	db, err := ConnectDB()
 	if err != nil {
@@ -174,13 +149,6 @@ func GetFollowingListDbHandler(ctx context.Context, req *pb.FollowListRequest, f
 	}
 	return users, nil
 }
-
-//message UpdateProfileRequest {
-//	string user_id = 1;
-//	optional string username = 2;
-//	optional string avatar_url = 3;
-//	optional string bio = 4;
-//}
 
 func UpdateProfileDbHandler(ctx context.Context, req *pb.UpdateProfileRequest) error {
 	db, err := ConnectDB()
@@ -229,4 +197,22 @@ func UpdateProfileDbHandler(ctx context.Context, req *pb.UpdateProfileRequest) e
 		return utils.DatabaseQueryError
 	}
 	return nil
+}
+
+func GetPasswordHashByUsername(ctx context.Context, email string) (string, error) {
+	db, err := ConnectDB()
+	if err != nil {
+		return "", utils.ConnectingToDbError
+	}
+	defer db.Close()
+
+	var passwordHash string
+	query := "SELECT password_hash FROM users WHERE email = $1"
+	err = db.GetContext(ctx, passwordHash, query, email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", utils.UserNotFound
+		}
+	}
+	return passwordHash, nil
 }

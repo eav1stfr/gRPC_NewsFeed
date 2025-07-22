@@ -63,4 +63,16 @@ var (
 	NoChangeAppliedError = &AppErr{
 		errMessage: "no change is applied",
 		statusCode: codes.InvalidArgument}
+	UserNotFound = &AppErr{
+		errMessage: "user with such username not found",
+		statusCode: codes.NotFound}
+	InvalidEncodedHashPasswordError = &AppErr{
+		errMessage: "invalid encoded hash format",
+		statusCode: codes.Internal}
+	DecodingPasswordError = &AppErr{
+		errMessage: "error decoding password",
+		statusCode: codes.Internal}
+	IncorrectPassword = &AppErr{
+		errMessage: "incorrect password",
+		statusCode: codes.PermissionDenied}
 )
